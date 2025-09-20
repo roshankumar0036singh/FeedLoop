@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFeedback+ 2.0 - Blockchain-Powered Campus Improvement</title>
+    <meta name="description" content="Submit feedback and reports to improve your campus experience while earning SHM rewards on the blockchain.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    
+    <!-- Web3.js -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader">
+            <div class="spinner"></div>
+            <p>CampusFeedback+ 2.0</p>
+            <small>Initializing blockchain rewards system...</small>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand" onclick="app?.navigateToPage('dashboard')">
+                <i class="fas fa-graduation-cap"></i>
+                <span>CampusFeedback+</span>
+                <span class="version">v2.0</span>
+            </a>
+            
+            <div id="navMenu" class="nav-menu">
+                <a href="#" class="nav-link active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-link" data-page="feedback">
+                    <i class="fas fa-comment-alt"></i>
+                    <span>Submit Feedback</span>
+                </a>
+                <a href="#" class="nav-link" data-page="reports">
+                    <i class="fas fa-flag"></i>
+                    <span>Report Issues</span>
+                </a>
+                <a href="#" class="nav-link" data-page="leaderboard">
+                    <i class="fas fa-trophy"></i>
+                    <span>Leaderboard</span>
+                </a>
+                <a href="#" class="nav-link" data-page="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </div>
+
+            <div class="nav-actions">
+                <div class="wallet-status" id="walletStatus">
+                    <div class="points-display" id="userPoints">0.000 SHM</div>
+                    <button id="connectWallet" class="btn btn-primary">
+                        <i class="fas fa-wallet"></i>
+                        Connect Wallet
+                    </button>
+                </div>
+                
+                <button id="hamburger" class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Page -->
+        <section id="dashboardPage" class="page active">
+            <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1>Welcome to CampusFeedback+ 2.0</h1>
+                    <p>Share your experiences, report issues, and earn blockchain rewards while helping improve your campus!</p>
+                    <div class="blockchain-status">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Blockchain-Secured Rewards System Active</span>
+                    </div>
+                    <div class="reward-info">
+                        <i class="fas fa-coins"></i>
+                        <span>Earn 0.01 SHM per submission</span>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-comment-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalFeedbacks">0</h3>
+                            <p>Total Feedbacks</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="averageRating">0.0</h3>
+                            <p>Average Rating</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="activeUsers">0</h3>
+                            <p>Active Contributors</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalRewards">0.000</h3>
+                            <p>SHM Distributed</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Grid -->
+                <div class="dashboard-grid">
+                    <!-- Quick Actions -->
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-rocket"></i> Quick Actions</h3>
+                        <div class="quick-actions">
+                            <a href="#" class="action-btn" data-page="feedback">
+                                <i class="fas fa-comment-alt"></i>
+                                <span>Submit Feedback</span>
+                                <small>Share your experience and earn SHM</small>
+                            </a>
+                            <a href="#" class="action-btn" data-page="reports">
+                                <i class="fas fa-flag"></i>
+                                <span>Report Issue</span>
+                                <small>Help improve campus facilities</small>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-clock"></i> Recent Activity</h3>
+                        <div id="recentActivity">
+                            <div class="loading-placeholder">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                Loading recent activity...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feedback Page -->
+        <section id="feedbackPage" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Submit Feedback</h1>
+                    <p>Share your campus experience and help us improve while earning SHM rewards!</p>
+                </div>
+
+                <div class="form-container">
+                    <form id="feedbackForm">
+                        <div class="form-group">
+                            <label for="feedbackCategory">Category *</label>
+                            <select id="feedbackCategory" name="category" required>
+                                <option value="">Select a category</option>
+                                <option value="academic">Academic Services</option>
+                                <option value="faculty">Faculty & Staff</option>
+                                <option value="infrastructure">Infrastructure</option>
+                                <option value="food">Food & Dining</option>
+                                <option value="transportation">Transportation</option>
+                                <option value="accommodation">Accommodation</option>
+                                <option value="sports">Sports & Recreation</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <div id="feedbackCategoryError" class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="feedbackTitle">Title *</label>
+                            <input type="text" id="feedbackTitle" name="title" placeholder="Brief title for your feedback" required>
+                            <div class="form-hint">5-100 characters</div>
+                            <div id="feedbackTitleError" class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rating">Rating *</label>
+                            <div class="rating-container">
+                                <div class="star-rating" data-rating="0">
+                                    <span class="star" data-rating="1">★</span>
+                                    <span class="star" data-rating="2">★</span>
+                                    <span class="star" data-rating="3">★</span>
+                                    <span class="star" data-rating="4">★</span>
+                                    <span class="star" data-rating="5">★</span>
+                                </div>
+                                <span class="rating-text">Click to rate</span>
+                            </div>
+                            <div id="ratingError" class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="textarea-container">
+                                <label for="feedbackContent">Your Feedback *</label>
+                                <textarea id="feedbackContent" name="content" placeholder="Share your detailed feedback here..." required></textarea>
+                                <button type="button" class="voice-input-btn" onclick="startVoiceInput('feedbackContent')" title="Voice Input">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
+                            <div class="form-hint">10-2000 characters</div>
+                            <div id="feedbackContentError" class="error-message"></div>
+                        </div>
+
+                        <!-- AI Moderation Display -->
+                        <div id="aiSuggestions" class="ai-suggestions" style="display: none;"></div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="anonymousFeedback" name="anonymous">
+                                <span class="checkmark"></span>
+                                Submit anonymously
+                            </label>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                                <i class="fas fa-eraser"></i>
+                                Clear Form
+                            </button>
+                            <button type="submit" class="btn btn-primary" data-original-text="<i class='fas fa-paper-plane'></i> Submit Feedback">
+                                <i class="fas fa-paper-plane"></i>
+                                Submit Feedback
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Recent Feedbacks -->
+                <div class="recent-feedbacks">
+                    <h3><i class="fas fa-history"></i> Recent Feedbacks</h3>
+                    <div id="feedbacksList" class="feedbacks-list">
+                        <div class="loading-placeholder">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            Loading feedbacks...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Page -->
+        <section id="reportsPage" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Report Issues</h1>
+                    <p>Help us identify and fix campus issues while earning SHM rewards for your contributions!</p>
+                </div>
+
+                <div class="form-container">
+                    <form id="reportForm">
+                        <div class="form-group">
+                            <label for="reportType">Issue Type *</label>
+                            <select id="reportType" name="type" required>
+                                <option value="">Select issue type</option>
+                                <option value="infrastructure">Infrastructure Problem</option>
+                                <option value="safety">Safety Concern</option>
+                                <option value="cleanliness">Cleanliness Issue</option>
+                                <option value="equipment">Equipment Malfunction</option>
+                                <option value="accessibility">Accessibility Problem</option>
+                                <option value="security">Security Issue</option>
+                                <option value="environmental">Environmental Concern</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <div id="reportTypeError" class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reportTitle">Issue Title *</label>
+                            <input type="text" id="reportTitle" name="title" placeholder="Brief description of the issue" required>
+                            <div class="form-hint">5-100 characters</div>
+                            <div id="reportTitleError" class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reportLocation">Location *</label>
+                            <input type="text" id="reportLocation" name="location" placeholder="Building, room number, or specific location" required>
+                            <div class="form-hint">3-200 characters</div>
+                            <div id="reportLocationError" class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="urgencyLevel">Urgency Level</label>
+                            <select id="urgencyLevel" name="urgency">
+                                <option value="low">Low - Can wait for scheduled maintenance</option>
+                                <option value="medium" selected>Medium - Should be addressed soon</option>
+                                <option value="high">High - Needs immediate attention</option>
+                                <option value="critical">Critical - Safety risk or major disruption</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="textarea-container">
+                                <label for="reportDescription">Detailed Description *</label>
+                                <textarea id="reportDescription" name="description" placeholder="Provide a detailed description of the issue, including what you observed and when..." required></textarea>
+                                <button type="button" class="voice-input-btn" onclick="startVoiceInput('reportDescription')" title="Voice Input">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
+                            <div class="form-hint">10-2000 characters</div>
+                            <div id="reportDescriptionError" class="error-message"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reportImages">Upload Images (Optional)</label>
+                            <div class="file-upload-container">
+                                <input type="file" id="reportImages" name="images" multiple accept="image/*" class="file-input">
+                                <label for="reportImages" class="file-label">
+                                    <i class="fas fa-camera"></i>
+                                    <span>Click to upload photos or drag & drop</span>
+                                    <small>Up to 5 images, max 10MB each (JPG, PNG, GIF)</small>
+                                </label>
+                                <div class="image-preview"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="clearReportForm()">
+                                <i class="fas fa-eraser"></i>
+                                Clear Form
+                            </button>
+                            <button type="submit" class="btn btn-primary" data-original-text="<i class='fas fa-flag'></i> Submit Report">
+                                <i class="fas fa-flag"></i>
+                                Submit Report
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Recent Reports -->
+                <div class="recent-reports">
+                    <h3><i class="fas fa-history"></i> Recent Reports</h3>
+                    <div id="reportsList" class="reports-list">
+                        <div class="loading-placeholder">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            Loading reports...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaderboard Page -->
+        <section id="leaderboardPage" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Community Leaderboard</h1>
+                    <p>See the top contributors making a difference in our campus community!</p>
+                </div>
+
+                <div class="leaderboard-container">
+                    <div class="leaderboard-filters">
+                        <button class="filter-btn active" data-filter="all">All Time</button>
+                        <button class="filter-btn" data-filter="month">This Month</button>
+                        <button class="filter-btn" data-filter="week">This Week</button>
+                    </div>
+                    
+                    <div id="leaderboardList" class="leaderboard-list">
+                        <div class="loading-placeholder">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            Loading leaderboard...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="achievements-section">
+                    <h3><i class="fas fa-medal"></i> Community Achievements</h3>
+                    <div class="achievements-grid">
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🎉</div>
+                            <h4>First Contribution</h4>
+                            <p>Submit your first feedback or report</p>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">🔥</div>
+                            <h4>Active Contributor</h4>
+                            <p>Submit 10 contributions</p>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">⭐</div>
+                            <h4>Quality Reporter</h4>
+                            <p>Consistently provide high-quality feedback</p>
+                        </div>
+                        <div class="achievement-card">
+                            <div class="achievement-icon">⛓️</div>
+                            <h4>Blockchain Pioneer</h4>
+                            <p>Connect wallet and earn rewards</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Page -->
+        <section id="profilePage" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Your Profile</h1>
+                    <p>Track your contributions, rewards, and impact on campus improvement!</p>
+                </div>
+
+                <div class="profile-card">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h2 id="userName">Campus User</h2>
+                        <p id="userEmail">user@campus.edu</p>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span class="stat-value" id="userFeedbackCount">0</span>
+                                <span class="stat-label">Feedbacks</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="userReportCount">0</span>
+                                <span class="stat-label">Reports</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value" id="userPointsProfile">0.000</span>
+                                <span class="stat-label">SHM Earned</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="editProfile()">
+                            <i class="fas fa-edit"></i>
+                            Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Wallet Information -->
+                <div class="dashboard-card">
+                    <h3><i class="fas fa-wallet"></i> Wallet & Rewards</h3>
+                    <div id="walletInfo">
+                        <div class="wallet-prompt">
+                            <p>Connect your MetaMask wallet to earn SHM tokens for your feedback and reports!</p>
+                            <div class="reward-info">
+                                <div class="reward-item">
+                                    <i class="fas fa-comment-alt"></i>
+                                    <span>0.01 SHM per feedback</span>
+                                </div>
+                                <div class="reward-item">
+                                    <i class="fas fa-flag"></i>
+                                    <span>0.01 SHM per report</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="web3Manager?.connectWallet()">
+                                <i class="fas fa-wallet"></i>
+                                Connect Wallet
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Achievements -->
+                <div class="achievements-section">
+                    <h3><i class="fas fa-trophy"></i> Your Achievements</h3>
+                    <div id="userAchievements" class="achievements-grid">
+                        <div class="empty-state">
+                            <i class="fas fa-medal"></i>
+                            <p>Start contributing to unlock achievements!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- Scripts - Load in correct order -->
+    <script src="js/config.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/moderation.js"></script>
+    <script src="js/web3.js"></script>
+    <script src="js/voice.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- Initialize -->
+    <script>
+        // Ensure everything is loaded before starting
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 CampusFeedback+ 2.0 starting...');
+            
+            // Add some startup delay to ensure all components are initialized
+            setTimeout(() => {
+                if (typeof app === 'undefined') {
+                    console.log('⏳ Waiting for app to initialize...');
+                    // App will initialize itself when ready
+                }
+            }, 2000);
+        });
+
+        // Global error handlers
+        window.addEventListener('error', (e) => {
+            console.error('🚨 Global error:', e.error);
+            if (typeof showNotification === 'function') {
+                showNotification('⚠️ An error occurred. Please refresh the page.', 'error');
+            }
+        });
+
+        window.addEventListener('unhandledrejection', (e) => {
+            console.error('🚨 Unhandled promise rejection:', e.reason);
+            if (typeof showNotification === 'function') {
+                showNotification('⚠️ A system error occurred. Please try again.', 'warning');
+            }
+        });
+    </script>
+</body>
+</html>
